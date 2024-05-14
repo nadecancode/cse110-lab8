@@ -54,6 +54,22 @@ function initializeServiceWorker() {
   // B5. TODO - In the event that the service worker registration fails, console
   //            log that it has failed.
   // STEPS B6 ONWARDS WILL BE IN /sw.js
+
+    if (!("serviceWorker" in navigator)) return;
+
+    window.addEventListener("load", async () => {
+        try {
+            const registration = await navigator.serviceWorker.register("/sw.js", {
+                scope: "/",
+            });
+
+            if (registration.active) {
+                console.log("ServiceWorker has been registered");
+            }
+        } catch (e) {
+            console.error(`Registration failed with ${e}`);
+        }
+    });
 }
 
 /**
@@ -65,6 +81,27 @@ function initializeServiceWorker() {
  * @returns {Array<Object>} An array of recipes found in localStorage
  */
 async function getRecipes() {
+    let recipes = JSON.parse(localStorage.getItem("recipes"));
+
+    if (recipes?.length) return recipes;
+
+    let networkRecipes = [];
+
+    return new Promise(async (resolve, reject) => {
+       for (let url of RECIPE_URLS) {
+           try {
+               const response = await (await fetch(url)).json();
+
+               networkRecipes.push(response);
+           } catch (e) {
+               console.error(e);
+               reject(e);
+           }
+       }
+
+       saveRecipesToStorage(networkRecipes);
+       resolve(networkRecipes);
+    });
   // EXPOSE - START (All expose numbers start with A)
   // A1. TODO - Check local storage to see if there are any recipes.
   //            If there are recipes, return them.

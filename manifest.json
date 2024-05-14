@@ -1,11 +1,11 @@
 {
-    "name": "",
-    "short_name": "",
-    "description": "",
-    "start_url": "",
-    "display": "",
-    "background_color": "",
-    "theme_color": "",
+    "name": "cse110-lab8",
+    "short_name": "Allen Zhang",
+    "description": "I believe this is a very good app for displaying recipes",
+    "start_url": "https://lab8.cse110.ucsd.nade.me",
+    "display": "minimal-ui",
+    "background_color": "black",
+    "theme_color": "black",
     "icons": [
       {
         "src": "/assets/images/icons/icon-192x192.png",
